@@ -1,4 +1,4 @@
-# Daily Zekr, Calendar & Tasks — n8n Template
+# Daily Zekr, Calendar & Tasks - n8n Template
 
 **A lightweight n8n workflow that sends a single morning email with:**
 - 🕌 **Zekr of the Day** (from Google Sheets)
