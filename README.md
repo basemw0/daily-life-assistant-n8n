@@ -60,3 +60,4 @@ This repo contains an importable n8n workflow (JSON) and supporting instructions
 
 ## Credits
 Thanks to **Osama Younis** for the azkar dataset that inspired this project.
+https://github.com/osamayy/azkar-db/blob/master/azkar.csv
