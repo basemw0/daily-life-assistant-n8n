@@ -1,0 +1,221 @@
+{
+  "name": "daily-life-assistant-n8n-template",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1344,
+        -112
+      ],
+      "id": "f5d124b0-84d3-4a23-916a-6368d3e63a73",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst dayOfMonth = new Date().getDate();\nconst index = (dayOfMonth - 1) % items.length;\n\nconst zekrText = items[index].json[\"zekr\"] || items[index].json[\"Column1\"];\nconst description = items[index].json[\"description\"] || items[index].json[\"Column2\"] || \"\";\n\nconst finalZekr = description ? `${zekrText} (${description})` : zekrText;\n\nreturn [{ json: { zekr: finalZekr } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -912,
+        -112
+      ],
+      "id": "024bc14e-5fee-47e4-b33d-07b8618c8872",
+      "name": "Choosing zekr"
+    },
+    {
+      "parameters": {
+        "documentId": "REPLACE_WITH_SHEET_ID",
+        "sheetName": "REPLACE_WITH_SHEET_NAME_OR_GID",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        -1136,
+        -112
+      ],
+      "id": "ceeafb7b-5caf-47a2-b20b-269620e05091",
+      "name": "Fetching azkar"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "You will receive three inputs: \n- zekr: A daily Zekr text and keep it as it is dont translate or change it in anyway(string).\n- events: A list of today's calendar events, each with title and time.\n- tasks: A list of today's to-do tasks (already cleaned).\n\nCreate a professional, plain-text daily summary email with:\n1. 🕌 Zekr of the Day\n2. 📅 Today's Calendar Events\n3. ✅ Today's Tasks\n\nRules:\n1. Show the Zekr in Arabic exactly as received (no transliteration).\n2. Use clear section headers with emojis:\n   🕌 Zekr of the Day\n   📅 Today's Calendar Events\n   ✅ Today's Tasks\n3. Events: I want them in the right order according to their timings, Use both start and end times for each event, formatted as \"Event Name (HH:MM - HH:MM)\". in 12-hour time.\n4. Tasks: bullet list with only the task name.\n5. If no events or tasks, say \"No events today.\" or \"No tasks today.\"\n6. Output in HTML with:\n   - <h2> for section headers\n   - <p> for the Zekr text and translation\n   - <ul><li> for event and task lists\n7. Do not include any extra commentary, marketing text, or hyperlinks unless provided in the inputs.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -720,
+        -112
+      ],
+      "id": "1a33af37-15bc-4c7e-9929-6d07420c110d",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -816,
+        128
+      ],
+      "id": "6446da6e-70ae-40da-91f3-28cf72a59d6e",
+      "name": "OpenAI Chat Model"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": "REPLACE_WITH_CALENDAR_ID",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        -656,
+        176
+      ],
+      "id": "dacc0af0-3c0f-4ba5-bbfb-a92a63b39581",
+      "name": "Get many events in Google Calendar"
+    },
+    {
+      "parameters": {
+        "sendTo": "REPLACE_WITH_YOUR_EMAIL",
+        "subject": "☀️ Good Morning! ☀️",
+        "message": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -368,
+        -112
+      ],
+      "id": "515cd174-ef91-4abb-85bf-d1db900324aa",
+      "name": "Send a message"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "getAll",
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.todoistTool",
+      "typeVersion": 2.1,
+      "position": [
+        -480,
+        128
+      ],
+      "id": "5026f75e-5902-4f0c-b7cc-535830ccadaf",
+      "name": "Get many tasks in Todoist"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Fetching azkar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetching azkar": {
+      "main": [
+        [
+          {
+            "node": "Choosing zekr",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Choosing zekr": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many events in Google Calendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many tasks in Todoist": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "416983a8-fae5-47c3-ad9e-96a6ff41b7dc",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "id": "69Bm8rV5pv2UhEFX",
+  "tags": []
+}
