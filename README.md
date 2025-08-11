@@ -9,14 +9,6 @@ This repo contains an importable n8n workflow (JSON) and supporting instructions
 
 ---
 
-## Files in this repo
-- `workflow.json` — the exported n8n workflow (credentials removed; import into your n8n)
-- `README.md` — this file
-- `screenshots/` — sample email & workflow screenshots
-- `LICENSE` — project license (MIT)
-
----
-
 ## Quick start ( import into n8n )
 
 1. **Import the workflow**
@@ -29,12 +21,11 @@ This repo contains an importable n8n workflow (JSON) and supporting instructions
 
 3. **Verify the Google Sheets structure**
    - Create a Google Sheet with a header row containing at least:
-     - `zekr` (Arabic text)
-     - `description` (optional short explanation)
-   - Upload your azkar list there and note the Sheet ID.
+     - `zekr` 
+   - Upload your azkar list there and note the Sheet ID (You will find the list down)
 
 4. **Configure the nodes**
-   - Google Sheets node: set **Document** to your sheet and **Range** to the column (e.g., `A:A` or the sheet page).
+   - Google Sheets node: set **Document** to your sheet.
    - Google Calendar node: choose the calendar to read from.
    - Todoist node: connect your Todoist account.
    - LLM / AI node: set your API key or credentials if using the formatter.
@@ -42,17 +33,10 @@ This repo contains an importable n8n workflow (JSON) and supporting instructions
 
 5. **Test the workflow**
    - In the editor, run nodes individually to confirm data flows:
-     - Run the Google Sheets node → ensure the `zekr` and `description` appear.
+     - Run the Google Sheets node → ensure the `zekr` appear.
      - Run Google Calendar → verify events return start & end times.
      - Run Todoist → ensure tasks are filtered (you may need to run the cleaning function).
    - Finally, run the full workflow (dry-run) or enable the Cron trigger for actual scheduled runs.
-
----
-
-## Notes & security
-- **⚠️ Remove secrets:** `workflow.json` has been sanitized, but always double-check for secrets before publishing.
-- **Tokens & credentials** must be created by each user inside their own n8n instance.
-- If you plan to distribute this widely, prefer using OAuth and instruct users to create their own API credentials.
 
 ---
 
@@ -63,25 +47,14 @@ This repo contains an importable n8n workflow (JSON) and supporting instructions
 4. Google Calendar node retrieves today’s events (start & end time).
 5. Todoist node retrieves today’s tasks (a Function node filters unwanted demo items).
 6. An LLM/Formatter node constructs a nice HTML email (zekr + translation/description + events + tasks).
-7. Gmail node sends the email (optionally attach a TTS MP3).
+7. Gmail node sends the email .
 
 ---
 
 ## Customization ideas
 - Send via WhatsApp using Twilio instead of email.
 - Add TTS audio of the Zekr and attach to the email.
-- Multi-user onboarding (turn into a small service).
-- Save sent emails in Google Drive or Notion for logging.
-
----
-
-## Contributing
-Contributions are welcome. Please open an issue or send a pull request. For significant changes, open an issue first to discuss.
-
----
-
-## License
-This project is licensed under the MIT License.
+- Add a personal Assistant Chatbot through telegram
 
 ---
 
