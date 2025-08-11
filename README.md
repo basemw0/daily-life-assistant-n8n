@@ -4,7 +4,7 @@
 
 - 🕌 **Zekr of the Day** (from Google Sheets)  
 - 📅 **Today's Schedule** (Google Calendar - start & end times)  
-- ✅ **Today's Tasks** (Todoist — cleaned and filtered)  
+- ✅ **Today's Tasks** (Todoist - cleaned and filtered)  
 - 📰 **Daily AI News Highlights** (aggregated from AI news sources)
 
 This repository includes an importable n8n workflow JSON file and instructions to help you set it up quickly on your own n8n instance.
