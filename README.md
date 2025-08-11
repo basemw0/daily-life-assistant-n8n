@@ -3,13 +3,14 @@
 **A lightweight n8n workflow that sends you a single morning email containing:**
 
 - 🕌 **Zekr of the Day** (from Google Sheets)  
-- 📅 **Today's Schedule** (Google Calendar — start & end times)  
+- 📅 **Today's Schedule** (Google Calendar - start & end times)  
 - ✅ **Today's Tasks** (Todoist — cleaned and filtered)  
 - 📰 **Daily AI News Highlights** (aggregated from AI news sources)
 
 This repository includes an importable n8n workflow JSON file and instructions to help you set it up quickly on your own n8n instance.
 
 ---
+<img width="1654" height="705" alt="image" src="https://github.com/user-attachments/assets/16987be6-0e0a-48b9-8af6-385b01e08f5f" />
 
 <img width="2147" height="1062" alt="image" src="https://github.com/user-attachments/assets/72f12061-b0b6-4dda-8f45-c069efb60c65" />
 
